@@ -33,8 +33,22 @@
         <div class="hero-scrim" aria-hidden="true"></div>
 
         <div class="hero-content">
+            @php
+                $schoolNameParts = preg_split('/\s+/', trim($profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN'));
+                $lastIdx = count($schoolNameParts) - 1;
+            @endphp
             <div class="hero-copy">
-                <h1 class="hero-title">{{ $profile->nama_sekolah }}</h1>
+                <h1 class="hero-title">
+                    @foreach ($schoolNameParts as $i => $word)
+                        @if (is_numeric($word))
+                            <span class="name-number">{{ $word }}</span>
+                        @elseif ($i === $lastIdx && $lastIdx > 0)
+                            <span class="name-accent">{{ $word }}</span>
+                        @else
+                            <span class="name-primary">{{ $word }}</span>
+                        @endif
+                    @endforeach
+                </h1>
                 <p class="hero-lead">{{ $profile->sambutan_judul }}</p>
 
                 <div class="hero-actions">

@@ -243,12 +243,49 @@
 .hero-title {
     font-family: var(--font-display);
     font-size: var(--text-display);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.06;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
     color: var(--color-field-ink);
     margin: 0 0 var(--space-md);
     max-width: 18ch;
+    text-shadow: 0 4px 20px rgba(4, 47, 46, 0.45);
+}
+
+.hero-title .name-primary {
+    color: var(--color-field-ink);
+}
+
+.hero-title .name-number {
+    color: var(--gold-400);
+}
+
+.hero-title .name-accent {
+    color: var(--toska-400);
+}
+
+.brand .name-primary {
+    color: var(--navy-950);
+}
+
+.brand .name-number {
+    color: var(--gold-600);
+}
+
+.brand .name-accent {
+    color: var(--toska-600);
+}
+
+.footer-brand-name .name-primary {
+    color: var(--color-field-ink);
+}
+
+.footer-brand-name .name-number {
+    color: var(--gold-400);
+}
+
+.footer-brand-name .name-accent {
+    color: var(--toska-400);
 }
 
 .hero-lead {

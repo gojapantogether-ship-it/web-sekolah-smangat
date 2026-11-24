@@ -18,6 +18,10 @@
 </head>
 <body>
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    @php
+        $navSchoolParts = preg_split('/\s+/', trim($profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN'));
+        $navLastIdx = count($navSchoolParts) - 1;
+    @endphp
     <header class="site-header" id="siteHeader">
         <div class="nav-container">
             <a href="{{ route('home') }}" class="brand" aria-label="Beranda {{ $profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN' }}">
@@ -28,7 +32,17 @@
                      class="brand-logo"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
                 <span class="brand-badge" style="display: none;" aria-hidden="true">{{ strtoupper(substr($profile->nama_sekolah ?? 'S', 0, 1)) }}</span>
-                <span>{{ $profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN' }}</span>
+                <span>
+                    @foreach ($navSchoolParts as $i => $word)
+                        @if (is_numeric($word))
+                            <span class="name-number">{{ $word }}</span>
+                        @elseif ($i === $navLastIdx && $navLastIdx > 0)
+                            <span class="name-accent">{{ $word }}</span>
+                        @else
+                            <span class="name-primary">{{ $word }}</span>
+                        @endif
+                    @endforeach
+                </span>
             </a>
 
             <button type="button" class="nav-toggle" id="navToggle" aria-label="Buka menu navigasi" aria-expanded="false">
@@ -94,7 +108,17 @@
                          height="36"
                          class="brand-logo"
                          onerror="this.style.display='none'">
-                    <span class="footer-brand-name">{{ $profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN' }}</span>
+                    <span class="footer-brand-name">
+                        @foreach ($navSchoolParts as $i => $word)
+                            @if (is_numeric($word))
+                                <span class="name-number">{{ $word }}</span>
+                            @elseif ($i === $navLastIdx && $navLastIdx > 0)
+                                <span class="name-accent">{{ $word }}</span>
+                            @else
+                                <span class="name-primary">{{ $word }}</span>
+                            @endif
+                        @endforeach
+                    </span>
                 </a>
 
                 <nav class="footer-nav" aria-label="Navigasi footer">
