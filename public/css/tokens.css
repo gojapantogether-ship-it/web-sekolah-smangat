@@ -1,0 +1,137 @@
+/* Hallmark · v2.0.0 · redesign: full · genre: editorial · theme: brand (toska-navy-gold + frosted glass by request) · posture: committed · hero: Poster · nav: frosted edge-aligned · footer: colophon mast */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · cut 3 pulsing orbs, 7 duplicate icon cards, accented hero word, 10 glued arrows, and Admin CTA from public nav to earn editorial restraint while honoring the user's toska-navy-gold palette and frosted glass */
+/* Hallmark · waive 23 · deep teal-navy field carries the hero and closing contact band under Committed posture while gold stays strictly on the single primary action and focus ring · user explicitly requested keeping the toska-navy-gold school theme */
+
+:root {
+    /* Typography — 2 families max, 3 weights (400, 600, 700) */
+    --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    /* Type scale (1.25 ratio from 16px body) */
+    --text-display: clamp(2.5rem, 5.2vw, 4.5rem);
+    --text-display-s: clamp(2rem, 3.6vw, 3.25rem);
+    --text-section: clamp(1.85rem, 3.2vw, 2.85rem);
+    --text-title: clamp(1.2rem, 1.5vw, 1.45rem);
+    --text-lead: clamp(1.05rem, 1.35vw, 1.25rem);
+    --text-md: 1rem;
+    --text-sm: 0.875rem;
+
+    /* Bespoke OKLCH Palette — Tinted Mineral Paper, Deep Institutional Teal-Navy, Warm Gold Signal */
+    --color-paper: oklch(97.8% 0.007 186);
+    --color-paper-2: oklch(94.8% 0.013 186);
+    --color-paper-3: oklch(91.5% 0.018 186);
+    --color-surface: oklch(99.2% 0.005 186);
+
+    --color-ink: oklch(19% 0.026 218);
+    --color-ink-soft: oklch(34% 0.022 214);
+    --color-muted: oklch(47% 0.018 210);
+    --color-rule: oklch(86% 0.016 192);
+    --color-rule-strong: oklch(76% 0.022 192);
+
+    /* Committed School Identity Field (Deep Teal-Navy) */
+    --color-field: oklch(20% 0.038 202);
+    --color-field-deep: oklch(15% 0.032 210);
+    --color-field-ink: oklch(96% 0.008 186);
+    --color-field-muted: oklch(82% 0.018 190);
+    --color-brand: oklch(46% 0.095 184);
+    --color-brand-hover: oklch(39% 0.092 184);
+    --color-brand-soft: oklch(92% 0.032 184);
+    --color-brand-ink: oklch(98% 0.006 184);
+
+    /* Accent Signal (Warm Institutional Gold — primary action & focus) */
+    --color-accent: oklch(76% 0.155 78);
+    --color-accent-hover: oklch(71% 0.16 74);
+    --color-accent-ink: oklch(18% 0.028 218);
+    --color-focus: oklch(68% 0.18 76);
+
+    /* Architectural Frosted Glass Tokens (User Requested) */
+    --glass-nav: oklch(98% 0.008 186 / 0.78);
+    --glass-nav-border: oklch(22% 0.03 206 / 0.1);
+    --glass-light: oklch(99% 0.006 186 / 0.72);
+    --glass-light-border: oklch(99% 0.006 186 / 0.65);
+    --glass-dark: oklch(18% 0.036 204 / 0.58);
+    --glass-dark-strong: oklch(16% 0.034 206 / 0.76);
+    --glass-dark-border: oklch(96% 0.012 186 / 0.22);
+    --glass-blur: blur(18px) saturate(145%);
+
+    /* Hero Photograph Scrim */
+    --hero-scrim: linear-gradient(
+        180deg,
+        oklch(15% 0.032 212 / 0.56) 0%,
+        oklch(17% 0.038 202 / 0.66) 58%,
+        oklch(15% 0.036 200 / 0.84) 100%
+    );
+
+    /* Spacing Scale (Hallmark Craft § 3) */
+    --space-3xs: 2px;
+    --space-2xs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+    --space-2xl: 64px;
+    --space-3xl: 96px;
+    --space-4xl: 144px;
+
+    /* Layout Canvas */
+    --container: 1360px;
+    --gutter: clamp(20px, 4.5vw, 64px);
+    --gap-columns: 32px;
+    --section-gap-s: clamp(64px, 8vw, 108px);
+    --section-gap: clamp(80px, 10vw, 136px);
+    --nav-height: 72px;
+
+    /* Radii (Concentric) */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-pill: 999px;
+
+    /* Subtle Elevation */
+    --shadow-subtle: 0 1px 2px oklch(19% 0.026 218 / 0.06);
+    --shadow-glass: 0 16px 40px oklch(14% 0.032 210 / 0.24);
+    --shadow-dropdown: 0 14px 34px oklch(16% 0.03 214 / 0.14);
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur-micro: 120ms;
+    --dur-short: 220ms;
+    --dur-long: 420ms;
+
+    /* Z-Index Ladder */
+    --z-base: 1;
+    --z-raised: 10;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-sticky-nav: 300;
+    --z-modal: 400;
+
+    /* Legacy Token Aliases (keeps all subpages harmonious without breakage) */
+    --toska-950: var(--color-field-deep);
+    --toska-900: var(--color-field);
+    --toska-800: oklch(29% 0.065 188);
+    --toska-700: var(--color-brand-hover);
+    --toska-600: var(--color-brand);
+    --toska-500: oklch(56% 0.105 184);
+    --toska-400: oklch(68% 0.105 182);
+    --toska-200: oklch(86% 0.045 184);
+    --toska-100: var(--color-brand-soft);
+    --toska-50:  var(--color-paper-2);
+    --navy-950:  var(--color-ink);
+    --navy-900:  var(--color-field);
+    --navy-800:  var(--color-ink-soft);
+    --gold-600:  var(--color-accent-hover);
+    --gold-500:  var(--color-accent);
+    --gold-400:  oklch(81% 0.145 82);
+    --gold-100:  oklch(94% 0.055 85);
+    --text-dark: var(--color-ink);
+    --text-muted: var(--color-muted);
+    --bg-page: var(--color-paper);
+    --surface: var(--color-surface);
+    --border: var(--color-rule);
+    --shadow-sm: var(--shadow-subtle);
+    --shadow-md: var(--shadow-dropdown);
+    --shadow-lg: var(--shadow-glass);
+}
