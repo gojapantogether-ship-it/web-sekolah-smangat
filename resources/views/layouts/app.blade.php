@@ -17,6 +17,7 @@
     @stack('styles')
 </head>
 <body>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
     <header class="site-header" id="siteHeader">
         <div class="nav-container">
             <a href="{{ route('home') }}" class="brand" aria-label="Beranda {{ $profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN' }}">
@@ -159,11 +160,28 @@
                 });
             });
 
-            if (header) {
-                window.addEventListener('scroll', function () {
+            const progressBar = document.getElementById('scrollProgress');
+            let scrollTicking = false;
+
+            function onScrollFrame() {
+                if (header) {
                     header.classList.toggle('scrolled', window.scrollY > 12);
-                }, { passive: true });
+                }
+                if (progressBar) {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    const ratio = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
+                    progressBar.style.transform = 'scaleX(' + ratio.toFixed(4) + ')';
+                }
+                scrollTicking = false;
             }
+
+            window.addEventListener('scroll', function () {
+                if (!scrollTicking) {
+                    window.requestAnimationFrame(onScrollFrame);
+                    scrollTicking = true;
+                }
+            }, { passive: true });
+            onScrollFrame();
         })();
     </script>
     @stack('scripts')

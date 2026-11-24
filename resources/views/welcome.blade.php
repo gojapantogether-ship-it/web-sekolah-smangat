@@ -43,14 +43,14 @@
                 </div>
             </div>
 
-            <div class="hero-glass-bar" aria-label="Ringkasan data sekolah">
+            <div class="hero-glass-bar glass-interactive" aria-label="Ringkasan data sekolah">
                 <div class="hero-stat">
-                    <span class="hero-stat-value">{{ $profile->jumlah_guru }}</span>
+                    <span class="hero-stat-value js-counter" data-target="{{ $profile->jumlah_guru }}">{{ $profile->jumlah_guru }}</span>
                     <span class="hero-stat-label">Guru &amp; pendidik</span>
                 </div>
 
                 <div class="hero-stat">
-                    <span class="hero-stat-value">{{ $profile->jumlah_siswa }}</span>
+                    <span class="hero-stat-value js-counter" data-target="{{ $profile->jumlah_siswa }}">{{ $profile->jumlah_siswa }}</span>
                     <span class="hero-stat-label">Peserta didik</span>
                 </div>
 
@@ -154,7 +154,7 @@
                                 ? asset('storage/' . $info->gambar)
                                 : asset('images/informasi/dummy-' . (($idx % 3) + 1) . '.jpg');
                         @endphp
-                        <a href="{{ route('informasi.detail', $info->slug) }}" class="news-article reveal-item">
+                        <a href="{{ route('informasi.detail', $info->slug) }}" class="news-article reveal-item" style="--i: {{ $idx }};">
                             <div class="news-thumb">
                                 <img src="{{ $infoImg }}"
                                      alt="{{ $info->judul }}"
@@ -196,31 +196,31 @@
                 </div>
 
                 <div class="directory-list">
-                    <a href="{{ route('guru') }}" class="directory-row reveal-item">
+                    <a href="{{ route('guru') }}" class="directory-row reveal-item" style="--i: 0;">
                         <h3 class="directory-name">Direktori Guru &amp; GTK</h3>
                         <p class="directory-desc">Daftar tenaga pendidik, mata pelajaran, wali kelas, dan staf tata usaha.</p>
                         <span class="directory-action">Buka direktori</span>
                     </a>
 
-                    <a href="{{ route('ekstrakurikuler') }}" class="directory-row reveal-item">
+                    <a href="{{ route('ekstrakurikuler') }}" class="directory-row reveal-item" style="--i: 1;">
                         <h3 class="directory-name">Ekstrakurikuler</h3>
                         <p class="directory-desc">Wadah pengembangan minat, bakat, olahraga, sains, dan organisasi siswa.</p>
                         <span class="directory-action">Lihat kegiatan</span>
                     </a>
 
-                    <a href="{{ route('prestasi') }}" class="directory-row reveal-item">
+                    <a href="{{ route('prestasi') }}" class="directory-row reveal-item" style="--i: 2;">
                         <h3 class="directory-name">Pojok Prestasi</h3>
                         <p class="directory-desc">Catatan kejuaraan akademik maupun non-akademik di tingkat daerah hingga nasional.</p>
                         <span class="directory-action">Lihat prestasi</span>
                     </a>
 
-                    <a href="{{ route('galeri') }}" class="directory-row reveal-item">
+                    <a href="{{ route('galeri') }}" class="directory-row reveal-item" style="--i: 3;">
                         <h3 class="directory-name">Galeri Foto Sekolah</h3>
                         <p class="directory-desc">Dokumentasi kegiatan belajar, fasilitas kampus, dan acara resmi sekolah.</p>
                         <span class="directory-action">Buka galeri</span>
                     </a>
 
-                    <a href="{{ route('ppdb') }}" class="directory-row reveal-item">
+                    <a href="{{ route('ppdb') }}" class="directory-row reveal-item" style="--i: 4;">
                         <h3 class="directory-name">Penerimaan Peserta Didik Baru</h3>
                         <p class="directory-desc">Jadwal pendaftaran, persyaratan berkas, dan panduan calon siswa baru.</p>
                         <span class="directory-action">Cek jadwal</span>
@@ -240,7 +240,7 @@
                     <a href="{{ route('ppdb') }}" class="btn-primary">Lihat informasi PPDB</a>
                 </div>
 
-                <div class="contact-glass-panel reveal-item">
+                <div class="contact-glass-panel glass-interactive reveal-item" style="--i: 1;">
                     <dl class="contact-dl">
                         <div>
                             <dt>Alamat sekolah</dt>
@@ -291,6 +291,53 @@
             });
         }
 
+        // Smooth count-up on hero stat numbers (tabular-nums)
+        const counters = document.querySelectorAll('.js-counter');
+        if (!prefersReduced && 'IntersectionObserver' in window && counters.length > 0) {
+            const counterObserver = new IntersectionObserver(function (entries, obs) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-target') || '0', 10);
+                    if (isNaN(target) || target <= 0) {
+                        obs.unobserve(el);
+                        return;
+                    }
+                    const duration = 900;
+                    const start = performance.now();
+                    function tick(now) {
+                        const progress = Math.min((now - start) / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        el.textContent = Math.round(eased * target);
+                        if (progress < 1) {
+                            requestAnimationFrame(tick);
+                        } else {
+                            el.textContent = target;
+                        }
+                    }
+                    requestAnimationFrame(tick);
+                    obs.unobserve(el);
+                });
+            }, { threshold: 0.3 });
+
+            counters.forEach(function (el) {
+                counterObserver.observe(el);
+            });
+        }
+
+        // Interactive pointer-tracking glass sheen
+        if (!prefersReduced) {
+            document.querySelectorAll('.glass-interactive').forEach(function (panel) {
+                panel.addEventListener('pointermove', function (e) {
+                    const rect = panel.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    panel.style.setProperty('--mx', x.toFixed(1) + '%');
+                    panel.style.setProperty('--my', y.toFixed(1) + '%');
+                }, { passive: true });
+            });
+        }
+
         // Hero background slideshow every 10s with pause on hover, focus, and visible control (Floor 18)
         const heroSection = document.getElementById('heroSection');
         const bgSlides = document.querySelectorAll('.hero-bg-slide');
@@ -302,26 +349,30 @@
             let userPaused = prefersReduced;
             let hoverPaused = false;
 
-            function updateButtonState() {
-                if (!toggleBtn || !toggleLabel) return;
-                toggleBtn.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
-                toggleLabel.textContent = userPaused ? 'Putar slide' : 'Jeda slide';
+            function syncPausedState() {
+                if (heroSection) {
+                    heroSection.classList.toggle('is-paused', userPaused || hoverPaused);
+                }
+                if (toggleBtn && toggleLabel) {
+                    toggleBtn.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
+                    toggleLabel.textContent = userPaused ? 'Putar slide' : 'Jeda slide';
+                }
             }
 
-            updateButtonState();
+            syncPausedState();
 
             if (toggleBtn) {
                 toggleBtn.addEventListener('click', function () {
                     userPaused = !userPaused;
-                    updateButtonState();
+                    syncPausedState();
                 });
             }
 
             if (heroSection) {
-                heroSection.addEventListener('mouseenter', function () { hoverPaused = true; });
-                heroSection.addEventListener('mouseleave', function () { hoverPaused = false; });
-                heroSection.addEventListener('focusin', function () { hoverPaused = true; });
-                heroSection.addEventListener('focusout', function () { hoverPaused = false; });
+                heroSection.addEventListener('mouseenter', function () { hoverPaused = true; syncPausedState(); });
+                heroSection.addEventListener('mouseleave', function () { hoverPaused = false; syncPausedState(); });
+                heroSection.addEventListener('focusin', function () { hoverPaused = true; syncPausedState(); });
+                heroSection.addEventListener('focusout', function () { hoverPaused = false; syncPausedState(); });
             }
 
             setInterval(function () {
