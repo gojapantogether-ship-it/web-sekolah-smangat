@@ -473,13 +473,31 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
     background-color: var(--color-paper-3);
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 5;
+    max-width: 520px;
+    width: 100%;
+    justify-self: end;
+    box-shadow: var(--shadow-dropdown);
 }
 
 .split-profile-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top center;
+}
+
+.principal-quote {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md) var(--space-lg);
+    border-left: 3px solid var(--color-brand);
+    background-color: var(--color-paper-2);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-lead);
+    line-height: 1.55;
+    color: var(--color-ink);
 }
 
 .media-glass-caption {
@@ -1034,6 +1052,10 @@
     .directory-layout,
     .contact-grid {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .split-profile-media {
+        justify-self: center;
     }
 
     .news-grid {

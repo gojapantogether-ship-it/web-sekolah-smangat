@@ -18,9 +18,9 @@
             $activeSlides->push(asset('images/school-hero.jpg'));
         }
 
-        $schoolPhoto = ($profile->foto_sekolah && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->foto_sekolah))
-            ? asset('storage/' . $profile->foto_sekolah)
-            : asset('images/school-hero.jpg');
+        $principalPhoto = ($profile->foto_kepala_sekolah && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->foto_kepala_sekolah))
+            ? asset('storage/' . $profile->foto_kepala_sekolah)
+            : asset('images/kepala-sekolah-default.jpg');
     @endphp
 
     {{-- HERO: POSTER POSTURE + ARCHITECTURAL FROSTED GLASS BAR --}}
@@ -90,15 +90,28 @@
         </div>
     </section>
 
-    {{-- PROFIL & SAMBUTAN SEKOLAH (SPLIT 5:7) --}}
+    {{-- SAMBUTAN & FOTO KEPALA SEKOLAH (SPLIT 5:7) --}}
     <section class="section-band">
         <div class="container">
             <div class="split-profile reveal-item">
                 <div class="split-profile-text">
-                    <h2 class="section-heading">Pendidikan berkarakter dan berprestasi</h2>
-                    <p>{{ $profile->sambutan_isi ?: $profile->profil_sekolah }}</p>
+                    <h2 class="section-heading">Sambutan Kepala Sekolah</h2>
+
+                    @if ($profile->motivasi_kepala_sekolah)
+                        <blockquote class="principal-quote">
+                            {{ $profile->motivasi_kepala_sekolah }}
+                        </blockquote>
+                    @endif
+
+                    <p style="white-space: pre-line;">{{ $profile->sambutan_isi ?: $profile->profil_sekolah }}</p>
 
                     <dl class="facts-list">
+                        @if ($profile->nama_kepala_sekolah)
+                            <div>
+                                <dt>Kepala Sekolah</dt>
+                                <dd>{{ $profile->nama_kepala_sekolah }}</dd>
+                            </div>
+                        @endif
                         @if ($profile->npsn)
                             <div>
                                 <dt>NPSN</dt>
@@ -111,12 +124,6 @@
                                 <dd>{{ $profile->akreditasi }}</dd>
                             </div>
                         @endif
-                        @if ($profile->nama_kepala_sekolah)
-                            <div>
-                                <dt>Kepala Sekolah</dt>
-                                <dd>{{ $profile->nama_kepala_sekolah }}</dd>
-                            </div>
-                        @endif
                         @if ($profile->email)
                             <div>
                                 <dt>Surel resmi</dt>
@@ -125,28 +132,25 @@
                         @endif
                     </dl>
 
-                    <a href="{{ route('profil') }}" class="btn-outline">Baca profil lengkap</a>
+                    <a href="{{ route('profil') }}" class="btn-outline">Baca profil lengkap sekolah</a>
                 </div>
 
                 <figure class="split-profile-media" style="margin: 0;">
-                    <img src="{{ $schoolPhoto }}"
-                         alt="Lingkungan {{ $profile->nama_sekolah }}"
-                         width="800"
-                         height="600"
-                         loading="lazy">
-                    @if ($profile->nama_kepala_sekolah || $profile->akreditasi)
-                        <figcaption class="media-glass-caption">
-                            <div>
-                                <strong>{{ $profile->nama_sekolah }}</strong>
-                                @if ($profile->nama_kepala_sekolah)
-                                    <span>Dipimpin oleh {{ $profile->nama_kepala_sekolah }}</span>
-                                @endif
-                            </div>
-                            @if ($profile->akreditasi)
-                                <span>Akreditasi {{ $profile->akreditasi }}</span>
-                            @endif
-                        </figcaption>
-                    @endif
+                    <img src="{{ $principalPhoto }}"
+                         alt="Foto {{ $profile->nama_kepala_sekolah ?: 'Kepala Sekolah ' . $profile->nama_sekolah }}"
+                         width="640"
+                         height="800"
+                         loading="lazy"
+                         onerror="this.src='{{ asset('images/kepala-sekolah-default.jpg') }}'">
+                    <figcaption class="media-glass-caption">
+                        <div>
+                            <strong>{{ $profile->nama_kepala_sekolah ?: 'Kepala Sekolah' }}</strong>
+                            <span>Kepala {{ $profile->nama_sekolah }}</span>
+                        </div>
+                        @if ($profile->akreditasi)
+                            <span>Akreditasi {{ $profile->akreditasi }}</span>
+                        @endif
+                    </figcaption>
                 </figure>
             </div>
         </div>
