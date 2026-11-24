@@ -138,4 +138,48 @@ class HomeController extends Controller
 
         return view('informasi-detail', compact('profile', 'informasi', 'relatedInfo'));
     }
+
+    public function sitemap()
+    {
+        $staticUrls = [
+            ['loc' => route('home'), 'priority' => '1.0', 'changefreq' => 'daily'],
+            ['loc' => route('profil'), 'priority' => '0.9', 'changefreq' => 'monthly'],
+            ['loc' => route('ppdb'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+            ['loc' => route('informasi'), 'priority' => '0.8', 'changefreq' => 'daily'],
+            ['loc' => route('guru'), 'priority' => '0.7', 'changefreq' => 'monthly'],
+            ['loc' => route('ekstrakurikuler'), 'priority' => '0.7', 'changefreq' => 'monthly'],
+            ['loc' => route('prestasi'), 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => route('galeri'), 'priority' => '0.7', 'changefreq' => 'weekly'],
+        ];
+
+        $articles = Information::where('is_published', true)
+            ->latest('tanggal_publikasi')
+            ->get(['slug', 'updated_at']);
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+        foreach ($staticUrls as $item) {
+            $xml .= "  <url>\n";
+            $xml .= '    <loc>' . e($item['loc']) . "</loc>\n";
+            $xml .= '    <changefreq>' . $item['changefreq'] . "</changefreq>\n";
+            $xml .= '    <priority>' . $item['priority'] . "</priority>\n";
+            $xml .= "  </url>\n";
+        }
+
+        foreach ($articles as $article) {
+            $xml .= "  <url>\n";
+            $xml .= '    <loc>' . e(route('informasi.detail', $article->slug)) . "</loc>\n";
+            if ($article->updated_at) {
+                $xml .= '    <lastmod>' . $article->updated_at->toAtomString() . "</lastmod>\n";
+            }
+            $xml .= "    <changefreq>weekly</changefreq>\n";
+            $xml .= "    <priority>0.7</priority>\n";
+            $xml .= "  </url>\n";
+        }
+
+        $xml .= '</urlset>';
+
+        return response($xml, 200)->header('Content-Type', 'application/xml; charset=UTF-8');
+    }
 }

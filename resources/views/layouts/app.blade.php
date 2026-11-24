@@ -1,10 +1,61 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    @php
+        $seoSchoolName = $profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN';
+        $seoTitle = trim($__env->yieldContent('title')) ?: $seoSchoolName;
+        $seoDescription = trim($__env->yieldContent('meta_description')) ?: ('Portal informasi resmi ' . $seoSchoolName . ': profil sekolah, direktori guru dan GTK, ekstrakurikuler, prestasi siswa, informasi PPDB, berita terbaru, dan galeri kegiatan.');
+        $seoOgType = trim($__env->yieldContent('og_type')) ?: 'website';
+        $seoOgImage = trim($__env->yieldContent('og_image')) ?: asset('images/school-hero.jpg');
+        $seoCanonical = url()->current();
+    @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('meta_description', 'Portal informasi resmi ' . ($profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN') . ': profil sekolah, direktori guru, ekstrakurikuler, prestasi, informasi PPDB, dan galeri kegiatan.')">
-    <title>@yield('title', $profile->nama_sekolah ?? 'SMA NEGERI 1 BENDUNGAN')</title>
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}">
+    <meta name="keywords" content="@yield('meta_keywords', $seoSchoolName . ', SMAN 1 Bendungan, website resmi sekolah, PPDB ' . $seoSchoolName . ', profil sekolah, direktori guru, ekstrakurikuler, prestasi siswa, berita sekolah')">
+    <meta name="author" content="{{ $seoSchoolName }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#0d9488">
+    <link rel="canonical" href="{{ $seoCanonical }}">
+    @if (config('services.google.site_verification'))
+        <meta name="google-site-verification" content="{{ config('services.google.site_verification') }}">
+    @endif
+
+    {{-- Open Graph / WhatsApp / Facebook --}}
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:type" content="{{ $seoOgType }}">
+    <meta property="og:site_name" content="{{ $seoSchoolName }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:url" content="{{ $seoCanonical }}">
+    <meta property="og:image" content="{{ $seoOgImage }}">
+
+    {{-- Twitter / X Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
+    <meta name="twitter:image" content="{{ $seoOgImage }}">
+
+    {{-- Schema.org Structured Data (HighSchool) --}}
+    <script type="application/ld+json">
+        {!! json_encode(array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'HighSchool',
+            'name' => $seoSchoolName,
+            'url' => url('/'),
+            'logo' => asset('images/logo.png'),
+            'image' => asset('images/school-hero.jpg'),
+            'description' => $seoDescription,
+            'telephone' => $profile->kontak ?? null,
+            'email' => $profile->email ?? null,
+            'address' => !empty($profile->alamat) ? [
+                '@type' => 'PostalAddress',
+                'streetAddress' => $profile->alamat,
+                'addressCountry' => 'ID',
+            ] : null,
+        ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -23,6 +23,7 @@ Route::get('/ppdb', [HomeController::class, 'ppdb'])->name('ppdb');
 Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
 Route::get('/informasi', [HomeController::class, 'informasi'])->name('informasi');
 Route::get('/informasi/{slug}', [HomeController::class, 'informasiDetail'])->name('informasi.detail');
+Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 
 // Autentikasi Admin
 Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('login');

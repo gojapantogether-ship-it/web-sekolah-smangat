@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('title', $informasi->judul . ' - ' . $profile->nama_sekolah)
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($informasi->ringkasan ?: $informasi->konten), 155))
+@section('og_type', 'article')
+@if ($informasi->gambar && \Illuminate\Support\Facades\Storage::disk('public')->exists($informasi->gambar))
+    @section('og_image', asset('storage/' . $informasi->gambar))
+@endif
 
 @push('styles')
 <style>
