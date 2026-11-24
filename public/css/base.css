@@ -43,7 +43,7 @@ h1,
 h2,
 h3,
 h4 {
-    color: var(--color-ink);
+    color: inherit;
     font-family: var(--font-display);
     font-weight: 600;
     text-wrap: balance;
